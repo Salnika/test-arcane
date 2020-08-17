@@ -7,6 +7,10 @@ from schemas.user import user_schema
 
 
 def create_user(username, firstname, lastname, birthdate, password):
+    if (User.check_username_availability(username)):
+        return {
+            "error": "username exist"
+        }
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     birhtdate_datetime = datetime.strptime(birthdate, '%d/%m/%Y')
     new_user = User(username, firstname, lastname,
@@ -25,6 +29,10 @@ def get_user(id):
 
 
 def update_user(id, username, firstname, lastname, birthdate, password):
+   if (User.check_username_availability(username)):
+        return {
+            "error": "username exist"
+        }
     user = User.query.get(id)
     user.username = username
     user.firstname = firstname

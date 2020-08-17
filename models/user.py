@@ -28,3 +28,9 @@ class User(db.Model):
         user_id = payload['identity']
         user = db.session.query(User).filter(User.id == user_id).first()
         return user
+
+    @staticmethod
+    def check_username_availability(username):
+        user_exist = db.session.query(User).filter(
+            User.username == username).first()
+        return user_exist
