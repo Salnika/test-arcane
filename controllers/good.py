@@ -1,4 +1,5 @@
 from flask import jsonify
+from sqlalchemy import func
 from db_config import db
 from models.good import Good
 from schemas.good import good_schema, goods_schema
@@ -47,3 +48,9 @@ def delete_good(current_user_id, id):
     db.session.delete(good)
     db.session.commit()
     return get_all_user_goods(current_user_id)
+
+
+def search_good(city):
+    goods = db.session.query(Good).filter(
+        func.lower(Good.city) == func.lower(city))
+    return goods_schema.jsonify(goods)
