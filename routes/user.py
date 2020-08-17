@@ -1,7 +1,6 @@
 from flask import request, jsonify
 from config import app
 from flask_jwt import jwt_required, current_identity
-from models.user import User
 from controllers.user import create_user as create_user_ctrl
 from controllers.user import update_user as update_user_ctrl
 from controllers.user import get_user as get_user_ctrl

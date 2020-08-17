@@ -29,10 +29,11 @@ def get_user(id):
 
 
 def update_user(id, username, firstname, lastname, birthdate, password):
-   if (User.check_username_availability(username)):
-        return {
-            "error": "username exist"
-        }
+  # if (User.check_username_availability(username)):
+  #      return {
+  #          "error": "username exist"
+  #      }
+
     user = User.query.get(id)
     user.username = username
     user.firstname = firstname

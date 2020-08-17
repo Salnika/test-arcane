@@ -10,3 +10,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['SECRET_KEY'] = 's3cr3et'
+app.config['JWT_VERIFY_EXPIRATION'] = False # for development only
