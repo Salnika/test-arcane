@@ -4,6 +4,7 @@ from flask_jwt import JWT
 from config import app
 from db_config import db
 from models.user import User
+import error_handler
 import routes.index
 
 jwt = JWT(app, User.authenticate, User.identity)
