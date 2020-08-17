@@ -3,6 +3,7 @@ import bcrypt
 from datetime import datetime
 from db_config import db
 from models.user import User
+from models.good import Good
 from schemas.user import user_schema
 
 
@@ -48,8 +49,12 @@ def update_user(id, username, firstname, lastname, birthdate, password):
 
 def delete_user(id):
     user = User.query.get(id)
-
+    goods = db.session.query(Good).filter(Good.user_id == id)
     db.session.delete(user)
+
+    for good in goods:
+      db.session.delete(good)
+
     db.session.commit()
 
     return user_schema.jsonify(user)
