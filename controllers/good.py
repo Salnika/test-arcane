@@ -3,6 +3,7 @@ from sqlalchemy import func
 from db_config import db
 from models.good import Good
 from schemas.good import good_schema, goods_schema
+from error_handler import Error
 
 
 def create_good(user_id, name, description, good_type, city, room_nb, owner_name):
@@ -23,9 +24,7 @@ def get_all_user_goods(user_id):
 def update_good(current_user_id, id, name, description, good_type, city, room_nb, owner_name):
     good = Good.query.get(id)
     if (good.user_id != current_user_id):
-        return {
-            "error": "You cant edit a good that you dont own"
-        }
+        raise Error('Invalid good ID', 403)
 
     good.name = name
     good.description = description
@@ -41,9 +40,7 @@ def update_good(current_user_id, id, name, description, good_type, city, room_nb
 def delete_good(current_user_id, id):
     good = Good.query.get(id)
     if (good.user_id != current_user_id):
-        return {
-            "error": "You cant edit a good that you dont own"
-        }
+        raise Error('Invalid good ID', 403)
 
     db.session.delete(good)
     db.session.commit()

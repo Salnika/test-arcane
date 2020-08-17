@@ -5,13 +5,13 @@ from db_config import db
 from models.user import User
 from models.good import Good
 from schemas.user import user_schema
+from error_handler import Error
 
 
 def create_user(username, firstname, lastname, birthdate, password):
     if (User.check_username_availability(username)):
-        return {
-            "error": "username exist"
-        }
+        raise Error('Username already exist', 409)
+      
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     birhtdate_datetime = datetime.strptime(birthdate, '%d/%m/%Y')
     new_user = User(username, firstname, lastname,
@@ -30,17 +30,16 @@ def get_user(id):
 
 
 def update_user(id, username, firstname, lastname, birthdate, password):
-  # if (User.check_username_availability(username)):
-  #      return {
-  #          "error": "username exist"
-  #      }
+    if (User.check_username_availability(username)):
+        raise Error('Username already exist', 409)
 
     user = User.query.get(id)
     user.username = username
     user.firstname = firstname
     user.lastname = lastname
     user.birthdate = datetime.strptime(birthdate, '%d/%m/%Y')
-    user.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    user.password = bcrypt.hashpw(
+        password.encode('utf-8'), bcrypt.gensalt())
 
     db.session.commit()
 
@@ -53,7 +52,7 @@ def delete_user(id):
     db.session.delete(user)
 
     for good in goods:
-      db.session.delete(good)
+        db.session.delete(good)
 
     db.session.commit()
 
