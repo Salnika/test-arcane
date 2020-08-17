@@ -5,8 +5,7 @@ from controllers.good import create_good as create_good_ctrl
 from controllers.good import get_all_user_goods as get_all_user_goods_ctrl
 from controllers.good import update_good as update_good_ctrl
 from controllers.good import delete_good as delete_good_ctrl
-
-# nom, description, type de bien, ville, pièces, caractéristiques des pièces, propriétaire
+from controllers.good import search_good as search_good_ctrl
 
 
 @app.route('/good', methods=['POST'])
@@ -43,3 +42,8 @@ def update_good(id):
 @jwt_required()
 def delete_good(id):
     return delete_good_ctrl(current_identity.id, id)
+
+
+@app.route('/good/search/<city>', methods=['GET'])
+def search_good(city):
+    return search_good_ctrl(city)
