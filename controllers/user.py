@@ -6,10 +6,11 @@ from models.user import User
 from schemas.user import user_schema
 
 
-def create_user(firstname, lastname, birthdate, password):
+def create_user(username, firstname, lastname, birthdate, password):
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     birhtdate_datetime = datetime.strptime(birthdate, '%d/%m/%Y')
-    new_user = User(firstname, lastname, birhtdate_datetime, hashed_password)
+    new_user = User(username, firstname, lastname,
+                    birhtdate_datetime, hashed_password)
 
     db.session.add(new_user)
     db.session.commit()
@@ -23,11 +24,12 @@ def get_user(id):
     return user_schema.jsonify(user)
 
 
-def update_user(id, firstname, lastname, birthdate, password):
+def update_user(id, username, firstname, lastname, birthdate, password):
     user = User.query.get(id)
+    user.username = username
     user.firstname = firstname
     user.lastname = lastname
-    user.birthdate = birthdate
+    user.birthdate = datetime.strptime(birthdate, '%d/%m/%Y')
     user.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     db.session.commit()
